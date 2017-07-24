@@ -2,32 +2,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Report implements TaskInterface{
+public class Report {
+    private Employee whoseReport;
     private int hoursWorked;
-    private List<TaskInterface> tasks;
+    private List<Task> tasks;
 
-    public void add(TaskInterface task){
+    public void add(Task task){
         tasks.add(task);
     }
 
-    public void perform(){
-        for (TaskInterface task: tasks) {
-            task.perform();
-        }
 
-    }
-
-    public Report(){
+    public Report(Employee employee){
+        whoseReport = employee;
         hoursWorked = 0;
-        tasks = new ArrayList<TaskInterface>(1);
+        tasks = new ArrayList<Task>(1);
     }
 
     public String toString(){
-        String s = ("All tasks took: \n" );
-        for (TaskInterface task: tasks) {
-             s += task + "\n" ;
+        if (tasks.isEmpty()){
+            String s = whoseReport.getName() + " performed 0 tasks \n";
+            return s;
+        }else{
+            String s = ("All tasks performed by " + whoseReport.getName() + " are:  \n" );
+            for (Task task: tasks) {
+                s += task + "\n";
+            }
+            return s;
         }
-        return s;
+
     }
 
 
