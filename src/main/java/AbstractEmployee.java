@@ -8,7 +8,7 @@ public abstract class AbstractEmployee implements Employee {
     public AbstractEmployee(String name, RoleType role){
         this.name = name;
         this.role = role;
-        report = new Report();
+        report = new Report(this);
     }
 
     public RoleType getRole() {
@@ -19,9 +19,9 @@ public abstract class AbstractEmployee implements Employee {
         return name;
     }
 
-    public void assign(TaskInterface task){
+    public void assign(Task task){
         report.add(task);
-        task.perform();
+        //task.perform();
     }
 
     public Report reportWork(){

@@ -1,5 +1,5 @@
 
-public class Task implements TaskInterface {
+public class Task {
     private int unitsOfWork;
     private String taskName;
 
