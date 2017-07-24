@@ -1,49 +1,46 @@
 
 public class App  {
     public static void main(String[] args){
-        AbstractEmployee dev1 = new Empl( "employe1",RoleType.developer);
-        AbstractEmployee test1 = new Empl( "employe2",RoleType.CEO);
-        AbstractEmployee test2 = new Empl( "employe3",RoleType.contributor);
-        AbstractEmployee test3 = new Empl( "employe4",RoleType.tester);
-        AbstractEmployee test4 = new Empl( "employe5",RoleType.teamleader);
-        AbstractEmployee test5 = new Empl( "employe6",RoleType.developer);
-        TeamManager teamManager = new TeamManager("teammaneger",RoleType.teamleader, 5);
-        teamManager.hire(dev1);
-        teamManager.hire(test1);
+        AbstractEmployee dev1 = new Empl( "Dev1",RoleType.developer);
+        AbstractEmployee contributor = new Empl( "Contributor",RoleType.contributor);
+        AbstractEmployee tester = new Empl( "Tester",RoleType.tester);
+        AbstractEmployee teamleader = new Empl( "Team leader",RoleType.teamleader);
+        AbstractEmployee dev2 = new Empl( "Dev2",RoleType.developer);
+        TeamManager teamManager = new TeamManager("Team manager",RoleType.teamleader, 5);
+        TeamManager ceo = new TeamManager("Ceo",RoleType.CEO,3);
+        ceo.hire(dev2,contributor,teamleader,teamManager);
+        teamManager.hire(dev1,tester);
         Task t1 = new Task(5, "something1");
-        teamManager.assign(t1);
         Task t2 = new Task(10, "something2");
         Task t3 = new Task(10, "something3");
         Task t4 = new Task(10, "something4");
         Task t5 = new Task(10, "something5");
         Task t6 = new Task(10, "something6");
-        System.out.println(test1.reportWork());
+        dev1.assign(t1);
         teamManager.assign(t2);
-        teamManager.assign(t2);
-        teamManager.hire(test2);
-        teamManager.hire(test3);
-        teamManager.hire(test4);
-        teamManager.hire(test5);
-        teamManager.fire(test2);
-        teamManager.hire(test5);
+        teamManager.hire(teamleader);
+        teamManager.hire(dev2);
+        teamManager.hire(dev2);
+        ceo.assign(t2);
+        ceo.assign(t5);
+        ceo.assign(t3);
         teamManager.assign(t3);
         teamManager.assign(t4);
         teamManager.assign(t5);
         System.out.println(teamManager.reportWork());
-        System.out.println("First worker");
-        System.out.println(test1.reportWork());
 
-        System.out.println("econd worker");
-        System.out.println(test2.reportWork());
+        System.out.println(ceo.reportWork());
 
-        System.out.println("Third worker");
-        System.out.println(test3.reportWork());
 
-        System.out.println("Forth worker");
-        System.out.println(test4.reportWork());
+        System.out.println(contributor.reportWork());
 
-        System.out.println("Fifth worker");
-        System.out.println(test5.reportWork());
+        System.out.println(tester.reportWork());
+
+
+        System.out.println(teamleader.reportWork());
+
+
+        System.out.println(dev2.reportWork());
 
 
 
