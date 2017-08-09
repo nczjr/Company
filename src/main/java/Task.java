@@ -25,7 +25,10 @@ public class Task {
         this.unitsOfWork = unitsOfWork;
     }
 
-    public String toString(){
-        return (taskName + " : " + unitsOfWork +  " unitsOfWork ");
+    @Override
+    public String toString() {
+        return "Task{" + taskName + ": " +
+                unitsOfWork + "unitsOfWork" +
+                "} \n";
     }
 }

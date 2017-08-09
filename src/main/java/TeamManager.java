@@ -9,18 +9,16 @@ public class TeamManager extends AbstractEmployee implements Manager {
     private int maxNumEmployes;
 
 
-    //Should I implement other contructors (like default constructor) even though I won't be using it???
-
     public TeamManager(String name, RoleType role, int size) {
         super(name, role);
         employeesArray = new ArrayList<Employee>(size);
         maxNumEmployes = size;
-        report = new Report(this);
+        report = new Report();
     }
 
     @Override
     public void fire(Employee employee) {
-        if (employeesArray.size()<=0)
+        if (employeesArray.isEmpty())
             System.out.println("You cannot fire anyone, you do not have any employees hired!");
         else {
             if (employeesArray.contains(employee)) {
@@ -36,13 +34,12 @@ public class TeamManager extends AbstractEmployee implements Manager {
     @Override
     public void hire(Employee... employee) {
         if (canHire()) {
-            int count = 0;
-            for (Employee em: employee) {
-                if (!employeesArray.contains(em)) {
-                    employeesArray.add(em);
-                    System.out.println(this.getName() + " hired " + em.getName());
-                    count++;
-                    if (count >= maxNumEmployes)
+            for(int i = 0; i < employee.length; i++){
+                if (!employeesArray.contains(employee[i])) {
+                    employeesArray.add(employee[i]);
+                    System.out.println(this.getName() + " hired " + employee[i].getName());
+
+                    if ((i+1)>= maxNumEmployes)
                         break;
                 }else continue;
             }
@@ -51,8 +48,30 @@ public class TeamManager extends AbstractEmployee implements Manager {
         else System.out.println("Too many employees, you have to fire someone first!");
     }
 
-    public void assign(Task task) {
-        report.add(task);
+    public void assign(Task... task) {
+        for (Task t: task) {
+            AbstractEmployee employeeToBeSigned = (AbstractEmployee) getLessOverburnedWorker();
+            System.out.println(this.getName() + " assigned " + employeeToBeSigned.getName() + " to the task" );
+            employeeToBeSigned.assign(t);
+            report.add(t);
+        }
+
+    }
+
+    public Employee getLessOverburnedWorker(){
+        int hours = 0;
+        Employee employeeWithMinHours = null;
+        for(int i = 0; i < employeesArray.size(); i++){
+              if (i == 0) {
+                  employeeWithMinHours = employeesArray.get(i);
+                  hours = employeeWithMinHours.getReport().getHoursWorked();
+              }
+              if (employeesArray.get(i).getReport().getHoursWorked()<hours){
+                employeeWithMinHours = employeesArray.get(i);
+                hours = employeeWithMinHours.getReport().getHoursWorked();
+              }
+        }
+        return employeeWithMinHours;
     }
 
     @Override
@@ -67,8 +86,9 @@ public class TeamManager extends AbstractEmployee implements Manager {
         else return true;
     }
 
-
-
-
+    @Override
+    public Report getReport() {
+        return report;
+    }
 }
 

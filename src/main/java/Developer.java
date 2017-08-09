@@ -1,7 +1,6 @@
-package PACKAGE_NAME;
 
-/**
- * Created by natka on 04.08.17.
- */
-public class Developer {
+public class Developer extends AbstractEmployee {
+    public Developer(String name){
+        super(name,RoleType.DEVELOPER);
+    }
 }

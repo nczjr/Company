@@ -1,7 +1,6 @@
-package PACKAGE_NAME;
 
-/**
- * Created by natka on 04.08.17.
- */
-public class Tester {
+public class Tester extends AbstractEmployee {
+    public Tester(String name){
+        super(name,RoleType.TESTER);
+    }
 }

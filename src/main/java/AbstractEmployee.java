@@ -1,27 +1,35 @@
-import javax.management.relation.Role;
-
 public abstract class AbstractEmployee implements Employee {
-    private String name;
+    private final String name;
     private RoleType role;
     private Report report;
 
     public AbstractEmployee(String name, RoleType role){
         this.name = name;
         this.role = role;
-        report = new Report(this);
+        report = new Report();
     }
 
+    @Override
     public RoleType getRole() {
         return role;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
-    public void assign(Task task){
-        report.add(task);
-        //task.perform();
+    @Override
+    public void assign(Task... task){
+        for (Task t: task) {
+            t.perform();
+            report.add(t);
+        }
+    }
+
+    @Override
+    public Report getReport() {
+        return report;
     }
 
     public Report reportWork(){
