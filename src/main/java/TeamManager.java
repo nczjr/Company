@@ -1,44 +1,47 @@
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class TeamManager extends AbstractEmployee implements Manager {
 
-    private ArrayList<Employee> employeesArray;
-    private Report report;
-    private int maxNumEmployes;
+    private final ArrayList<Employee> employeesArray;
+    private final Report report;
+    private final int maxNumEmployes;
 
 
-    public TeamManager(String name, RoleType role, int size) {
-        super(name, role);
-        employeesArray = new ArrayList<Employee>(size);
-        maxNumEmployes = size;
-        report = new Report();
+//    public TeamManager(String name, RoleType role, int size) {
+//        super(name, role);
+//        employeesArray = new ArrayList<Employee>(size);
+//        maxNumEmployes = size;
+////        report = new Report();
+//    }
+
+    public TeamManager(Builder builder){
+        super(builder);
+        this.employeesArray = new ArrayList<Employee>(builder.maxNumEmployes);
+        this.report = new Report();
+        this.maxNumEmployes = builder.maxNumEmployes;
+
     }
 
     @Override
     public void fire(Employee employee) {
-        if (employeesArray.isEmpty())
-            System.out.println("You cannot fire anyone, you do not have any employees hired!");
+        if (!employeesArray.contains(employee))
+            System.out.println("You cannot fire anyone, you do not have such employee hired!");
         else {
-            if (employeesArray.contains(employee)) {
-                String name = employee.getName();
-                employeesArray.remove(employee);
-                System.out.println(name + " got fired!");
-            }
-            else
-                System.out.println("You cannot fire this employee because he is not yours!");
+            String name = employee.getName();
+            employeesArray.remove(employee);
+            System.out.println(name + " got fired!");
+
         }
     }
 
     @Override
-    public void hire(Employee... employee) {
+    public void hire(ArrayList<Employee> employee) {
         if (canHire()) {
-            for(int i = 0; i < employee.length; i++){
-                if (!employeesArray.contains(employee[i])) {
-                    employeesArray.add(employee[i]);
-                    System.out.println(this.getName() + " hired " + employee[i].getName());
-
+            for(int i = 0; i < employee.size(); i++){
+                if (!employeesArray.contains(employee.get(i))) {
+                    employeesArray.add(employee.get(i));
+                    System.out.println(this.getName() + " hired " + employee.get(i).getName());
                     if ((i+1)>= maxNumEmployes)
                         break;
                 }else continue;
@@ -48,12 +51,22 @@ public class TeamManager extends AbstractEmployee implements Manager {
         else System.out.println("Too many employees, you have to fire someone first!");
     }
 
+    @Override
+    public void hire(Employee employee) {
+        if (canHire())
+            employeesArray.add(employee);
+        else
+            System.out.println("Too many employees, you have to fire someone first!");
+    }
+
     public void assign(Task... task) {
         for (Task t: task) {
-            AbstractEmployee employeeToBeSigned = (AbstractEmployee) getLessOverburnedWorker();
-            System.out.println(this.getName() + " assigned " + employeeToBeSigned.getName() + " to the task" );
-            employeeToBeSigned.assign(t);
-            report.add(t);
+            if (!employeesArray.isEmpty()) {
+                AbstractEmployee employeeToBeSigned = (AbstractEmployee) getLessOverburnedWorker();
+                System.out.println(this.getName() + " assigned " + employeeToBeSigned.getName() + " to the task" );
+                employeeToBeSigned.assign(t);
+                report.add(t);
+            }
         }
 
     }
@@ -81,14 +94,40 @@ public class TeamManager extends AbstractEmployee implements Manager {
 
     @Override
     public boolean canHire() {
-        if (employeesArray.size()>=maxNumEmployes)
-            return false;
-        else return true;
+        return (employeesArray.size()>=maxNumEmployes);
     }
 
     @Override
     public Report getReport() {
         return report;
+    }
+
+
+    public static class Builder<Builder> extends AbstractEmployee.Builder<Builder> {
+
+        private final int maxNumEmployes;
+
+        @Override
+        public Builder getThis() {
+            return this;
+        }
+
+        @Override
+        public Builder role(RoleType role) {
+            super.role(RoleType.TEAM_LEADER);
+            getThis();
+        }
+
+        public Builder maxNumEmployes(int maxNumEmployes){
+            this.maxNumEmployes = maxNumEmployes;
+            getThis();
+        }
+
+        @Override
+        public TeamManager build() {
+            return new TeamManager(this);
+        }
+
     }
 }
 

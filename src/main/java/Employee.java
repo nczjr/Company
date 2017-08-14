@@ -6,4 +6,9 @@ public interface Employee {
     void assign(Task... task);
     Report reportWork();
     Report getReport();
+    String getUniversity();
+    GenderType getGender();
+    String getCountry();
+    String getTelephoneNumber();
+
 }

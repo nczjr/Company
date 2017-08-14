@@ -1,7 +1,9 @@
+import java.util.ArrayList;
 
 public interface Manager extends Employee {
-    public void hire(Employee... employee);
-    public void fire(Employee employee);
-    public boolean canHire();
+    void hire(ArrayList<Employee> employee);
+    void hire(Employee employee);
+    void fire(Employee employee);
+    boolean canHire();
 
 }
