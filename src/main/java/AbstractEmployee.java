@@ -78,7 +78,7 @@ public abstract class AbstractEmployee implements Employee {
                 '}';
     }
 
-    public static abstract class Builder<T extends Builder<T>> {
+    public static abstract class Builder {
         private String name;
         private RoleType role;
         private String university;
@@ -91,44 +91,44 @@ public abstract class AbstractEmployee implements Employee {
 
         }
 
-        public T name(String name) {
+        public Builder name(String name) {
             this.name = name;
-            return getThis();
+            return this;
         }
 
-        public T role(RoleType role) {
+        public Builder role(RoleType role) {
             this.role = role;
-            return getThis();
+            return this;
         }
 
-        public T university(String university) {
+        public Builder university(String university) {
             this.university = university;
-            return getThis();
+            return this;
         }
 
-        public T gender(GenderType gender) {
+        public Builder gender(GenderType gender) {
             this.gender = gender;
-            return getThis();
+            return this;
         }
 
-        public T country(String country) {
+        public Builder country(String country) {
             this.country = country;
-            return getThis();
+            return this;
         }
 
-        public T telephoneNumber(String telephoneNumber) {
+        public Builder telephoneNumber(String telephoneNumber) {
             this.telephoneNumber = telephoneNumber;
-            return getThis();
+            return this;
         }
 
-        public T email(String email){
+        public Builder email(String email){
             this.telephoneNumber = email;
-            return getThis();
+            return this;
         }
 
-        public abstract T getThis();
+        //public abstract Builder getThis();
 
-        public abstract T build();
+        public abstract AbstractEmployee build();
 
 
     }

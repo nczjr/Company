@@ -9,17 +9,11 @@ public class Ceo extends TeamManager {
         super(builder);
     }
 
-    public static class Builder<Builder> extends AbstractEmployee.Builder<Builder> {
+    public static class Builder extends TeamManager.Builder {
 
 
-        @Override
-        public Builder getThis() {
-            return this;
-        }
-
-        @Override
-        public Builder role(RoleType role) {
-            return super.role(RoleType.CEO);
+        public Builder(){
+            role(RoleType.CEO);
         }
 
 

@@ -14,16 +14,10 @@ public class Contributor extends AbstractEmployee{
         }
     }
 
-    public static class Builder<Builder> extends AbstractEmployee.Builder<Builder> {
+    public static class Builder extends AbstractEmployee.Builder {
 
-        @Override
-        public Builder getThis() {
-            return this;
-        }
-
-        @Override
-        public Builder role(RoleType role) {
-            return super.role(RoleType.CONTRIBUTOR);
+        public Builder(){
+            role(RoleType.CONTRIBUTOR);
         }
 
         public Contributor build() {

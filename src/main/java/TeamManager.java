@@ -5,7 +5,7 @@ public class TeamManager extends AbstractEmployee implements Manager {
 
     private final ArrayList<Employee> employeesArray;
     private final Report report;
-    private final int maxNumEmployes;
+    private int maxNumEmployes;
 
 
 //    public TeamManager(String name, RoleType role, int size) {
@@ -103,24 +103,17 @@ public class TeamManager extends AbstractEmployee implements Manager {
     }
 
 
-    public static class Builder<Builder> extends AbstractEmployee.Builder<Builder> {
+    public static class Builder extends AbstractEmployee.Builder {
 
-        private final int maxNumEmployes;
+        private int maxNumEmployes;
 
-        @Override
-        public Builder getThis() {
-            return this;
-        }
-
-        @Override
-        public Builder role(RoleType role) {
-            super.role(RoleType.TEAM_LEADER);
-            getThis();
+        public Builder(){
+            role(RoleType.TEAM_LEADER);
         }
 
         public Builder maxNumEmployes(int maxNumEmployes){
             this.maxNumEmployes = maxNumEmployes;
-            getThis();
+            return this;
         }
 
         @Override

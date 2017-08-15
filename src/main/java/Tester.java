@@ -14,18 +14,11 @@ public class Tester extends AbstractEmployee {
         }
     }
 
-    public static class Builder<Builder> extends AbstractEmployee.Builder<Builder> {
+    public static class Builder extends AbstractEmployee.Builder {
 
-        @Override
-        public Builder getThis() {
-            return this;
+        public Builder(){
+            role(RoleType.TESTER);
         }
-
-        @Override
-        public Builder role(RoleType role) {
-            return super.role(RoleType.TESTER);
-        }
-
         public Tester build() {
             return new Tester(this);
         }

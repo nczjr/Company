@@ -15,20 +15,10 @@ public class Developer extends AbstractEmployee {
     }
 
 
-    public static class Builder<Builder> extends AbstractEmployee.Builder<Builder> {
+    public static class Builder extends AbstractEmployee.Builder {
 
         public Builder(){
-
-        }
-
-        @Override
-        public Builder getThis() {
-            return this;
-        }
-
-        @Override
-        public Builder role(RoleType role) {
-            return super.role(RoleType.DEVELOPER);
+            role(RoleType.DEVELOPER);
         }
 
         public Developer build() {
