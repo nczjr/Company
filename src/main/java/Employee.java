@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public interface Employee {
     RoleType getRole();
     String getName();
@@ -7,8 +5,9 @@ public interface Employee {
     Report reportWork();
     Report getReport();
     String getUniversity();
-    GenderType getGender();
+    Sex getSex();
     String getCountry();
     String getTelephoneNumber();
+    String getEmail();
 
 }

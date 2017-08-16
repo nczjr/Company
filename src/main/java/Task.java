@@ -27,8 +27,8 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" + taskName + ": " +
+        return  taskName + ": " +
                 unitsOfWork + "unitsOfWork" +
-                "} \n";
+                " \n";
     }
 }

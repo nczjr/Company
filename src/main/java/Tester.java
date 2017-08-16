@@ -1,8 +1,6 @@
 
 public class Tester extends AbstractEmployee {
-//    public Tester(String name){
-//        super(name,RoleType.TESTER);
-//    }
+
     public Tester(Builder builder){
         super(builder);
     }
@@ -16,9 +14,11 @@ public class Tester extends AbstractEmployee {
 
     public static class Builder extends AbstractEmployee.Builder {
 
-        public Builder(){
-            role(RoleType.TESTER);
+        public Builder(String name){
+            super(name,RoleType.TESTER);
         }
+
+
         public Tester build() {
             return new Tester(this);
         }

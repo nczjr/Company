@@ -19,8 +19,10 @@ public class Report {
 
     private void countHours(){
         this.hoursWorked = 0;
-        for (Task task : tasks) {
-            this.hoursWorked += task.getUnitsOfWork();
+        if (!tasks.isEmpty()) {
+            for (Task task : tasks) {
+                this.hoursWorked += task.getUnitsOfWork();
+            }
         }
     }
 

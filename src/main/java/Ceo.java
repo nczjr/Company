@@ -1,10 +1,6 @@
 
 public class Ceo extends TeamManager {
 
-//    public Ceo(String name, int size){
-//        super(name,RoleType.CEO,size);
-//    }
-
     public Ceo(Builder builder){
         super(builder);
     }
@@ -12,8 +8,9 @@ public class Ceo extends TeamManager {
     public static class Builder extends TeamManager.Builder {
 
 
-        public Builder(){
-            role(RoleType.CEO);
+        public Builder(String name, int maxNumEmployees){
+            super(name,maxNumEmployees);
+            super.role(RoleType.CEO);
         }
 
 

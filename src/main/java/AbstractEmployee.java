@@ -1,29 +1,23 @@
-import javafx.util.Builder;
-
 public abstract class AbstractEmployee implements Employee {
     private final String name;
     private final RoleType role;
     private final Report report;
     private final String university;
-    private final GenderType gender;
+    private final Sex sex;
     private final String country;
     private final String telephoneNumber;
+    private final String email;
 
     public AbstractEmployee(Builder builder){
         this.name = builder.name;
         this.role = builder.role;
         this.report = new Report();
         this.university = builder.university;
-        this.gender = builder.gender;
+        this.sex = builder.gender;
         this.country = builder.country;
         this.telephoneNumber = builder.telephoneNumber;
+        this.email = builder.email;
     }
-
-//    AbstractEmployee(String name, RoleType role){
-//        this.name = name;
-//        this.role = role;
-//        report = new Report();
-//    }
 
 
     @Override
@@ -47,19 +41,19 @@ public abstract class AbstractEmployee implements Employee {
     }
 
     @Override
-    public GenderType getGender() {
-        return gender;
+    public Sex getSex() {
+        return sex;
     }
 
     @Override
-    public String getCountry() {
-        return country;
-    }
+    public String getCountry() { return country; }
 
     @Override
     public String getTelephoneNumber() {
         return telephoneNumber;
     }
+
+    public String getEmail() { return email; }
 
     public Report reportWork(){
         return this.report;
@@ -67,28 +61,33 @@ public abstract class AbstractEmployee implements Employee {
 
     @Override
     public String toString() {
-        return "AbstractEmployee{" +
-                "name='" + name + '\'' +
-                ", role=" + role +
-                ", report=" + report +
-                ", university='" + university + '\'' +
-                ", gender=" + gender +
-                ", country='" + country + '\'' +
-                ", telephoneNumber='" + telephoneNumber + '\'' +
-                '}';
+        return "Name = " + name  +
+                ", role = " + role +
+                ", university = " + university +
+                ", sex = " + sex +
+                ", country = " + country +
+                ", telephoneNumber = " + telephoneNumber +
+                ", email = " + email +
+                ", report = " + report ;
     }
 
     public static abstract class Builder {
         private String name;
         private RoleType role;
         private String university;
-        private GenderType gender;
+        private Sex gender;
         private String country;
         private String telephoneNumber;
         private String email;
 
+
         public Builder(){
 
+        }
+
+        public Builder(String name, RoleType role){
+            this.name = name;
+            this.role = role;
         }
 
         public Builder name(String name) {
@@ -106,7 +105,7 @@ public abstract class AbstractEmployee implements Employee {
             return this;
         }
 
-        public Builder gender(GenderType gender) {
+        public Builder gender(Sex gender) {
             this.gender = gender;
             return this;
         }
@@ -122,11 +121,10 @@ public abstract class AbstractEmployee implements Employee {
         }
 
         public Builder email(String email){
-            this.telephoneNumber = email;
+            this.email = email;
             return this;
         }
 
-        //public abstract Builder getThis();
 
         public abstract AbstractEmployee build();
 

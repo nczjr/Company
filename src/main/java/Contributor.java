@@ -17,7 +17,11 @@ public class Contributor extends AbstractEmployee{
     public static class Builder extends AbstractEmployee.Builder {
 
         public Builder(){
-            role(RoleType.CONTRIBUTOR);
+
+        }
+
+        public Builder(String name){
+            super(name,RoleType.CONTRIBUTOR);
         }
 
         public Contributor build() {

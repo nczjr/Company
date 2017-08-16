@@ -21,6 +21,10 @@ public class Developer extends AbstractEmployee {
             role(RoleType.DEVELOPER);
         }
 
+        public Builder(String name){
+            super(name,RoleType.DEVELOPER);
+        }
+
         public Developer build() {
             return new Developer(this);
         }
