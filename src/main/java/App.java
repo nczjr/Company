@@ -4,8 +4,8 @@ public class App  {
 //        Generator.generate(3);
 //        Generator.generateReports();
 
-        Developer.Builder devBuild = new Developer.Builder("A");
-        devBuild.email("natka@gmail.com")
+        Developer.Builder devBuild = new Developer.Builder("D");
+                devBuild.email("natka@gmail.com")
                 .country("POLAND")
                 .telephoneNumber("123456778")
                 .university("aGH ");
@@ -25,8 +25,11 @@ public class App  {
         TeamManager.Builder mng = new TeamManager.Builder("Antek",5);
 
         TeamManager manager = mng.build();
-        System.out.println(developer );
-        System.out.println(manager);
+        Ceo.Builder ceo = new Ceo.Builder("Krol",5);
+        Ceo c = ceo.build();
+        c.hire(manager);
+//        System.out.println(developer );
+//        System.out.println(manager);
 
         manager.hire(developer);
         manager.hire(developer1);
@@ -37,6 +40,7 @@ public class App  {
         Task t4 = new Task(4,"kodzenie");
         Task t5 = new Task(4,"kodzenie");
         manager.assign(t1,t2,t3,t4,t5);
-        System.out.println(manager);
+        System.out.println("HOL");
+        c.report();
     }
 }

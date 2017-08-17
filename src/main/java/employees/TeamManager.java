@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 import static java.util.Collections.*;
@@ -10,7 +12,8 @@ public class TeamManager extends AbstractEmployee implements Manager {
     private final ArrayList<Employee> employeesArray;
     private final Report report;
     private final int maxNumEmployes;
-    private final Predicate<Employee> employeesPredicate;
+    private Predicate<Employee> employeesPredicate;
+    private ArrayList<Report> reports;
 
 
     public TeamManager(Builder builder){
@@ -20,6 +23,10 @@ public class TeamManager extends AbstractEmployee implements Manager {
         this.maxNumEmployes = builder.maxNumEmployes;
         this.employeesPredicate = builder.employeesPredicate;
 
+    }
+
+    public ArrayList<Employee> getEmployeesArray() {
+        return employeesArray;
     }
 
     @Override
@@ -58,12 +65,48 @@ public class TeamManager extends AbstractEmployee implements Manager {
                 report.add(t);
             }
         }
-
-
     }
+//    public static Comparator<Employee>  employeeComparator(Comparator<? super Employee> comp1,Comparator<? super Employee> comp2,Comparator<? super Employee> comp3) {
+//        return new Comparator<Employee>() {
+//            @Override
+//            public int compare(Employee o1, Employee o2) {
+//                int result = comp1.compare(o1,o2);
+//                if (result != 0) return result;
+//                else {
+//                    int res = comp2.compare(o1, o2);
+//                    if (res != 0) return res;
+//                    else return comp3.compare(o1,o2);
+//                }
+//            }
+//        };
+//    }
+//
+//    public void report(){
+//        Collections.sort(getEmployeesArray(),
+//                employeeComparator(new Comparator<Employee>() {
+//                    @Override
+//                    public int compare(Employee o1, Employee o2) {
+//                        return o2.getName().compareTo(o1.getName());
+//                    }
+//                }, new Comparator<Employee>() {
+//                    public int compare(Employee o1, Employee o2) {
+//                        return o2.getRole().compareTo(o1.getRole());
+//                    }
+//                }, new Comparator<Employee>() {
+//                    @Override
+//                    public int compare(Employee o1, Employee o2) {
+//                        return o1.getReport().getHoursWorked()-o2.getReport().getHoursWorked();
+//                    }
+//                }));
+//        System.out.println(employeesArray);
+//        for (Employee e: getEmployeesArray())
+//            System.out.println("I'm printing employees and their reports" + e.getName() + e.getReport().toString());
+//
+//    }
 
     @Override
     public Report reportWork() {
+        //report();
         return this.report;
     }
 
