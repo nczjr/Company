@@ -1,6 +1,6 @@
 public abstract class AbstractEmployee implements Employee {
     private final String name;
-    private final RoleType role;
+    private final Role role;
     private final Report report;
     private final String university;
     private final Sex sex;
@@ -8,12 +8,12 @@ public abstract class AbstractEmployee implements Employee {
     private final String telephoneNumber;
     private final String email;
 
-    public AbstractEmployee(Builder builder){
+    AbstractEmployee(Builder builder){
         this.name = builder.name;
         this.role = builder.role;
         this.report = new Report();
         this.university = builder.university;
-        this.sex = builder.gender;
+        this.sex = builder.sex;
         this.country = builder.country;
         this.telephoneNumber = builder.telephoneNumber;
         this.email = builder.email;
@@ -21,7 +21,7 @@ public abstract class AbstractEmployee implements Employee {
 
 
     @Override
-    public RoleType getRole() {
+    public Role getRole() {
         return role;
     }
 
@@ -71,11 +71,11 @@ public abstract class AbstractEmployee implements Employee {
                 ", report = " + report ;
     }
 
-    public static abstract class Builder {
+    public abstract static class Builder<T extends Builder<T>>{
         private String name;
-        private RoleType role;
+        private Role role;
         private String university;
-        private Sex gender;
+        private Sex sex;
         private String country;
         private String telephoneNumber;
         private String email;
@@ -85,46 +85,46 @@ public abstract class AbstractEmployee implements Employee {
 
         }
 
-        public Builder(String name, RoleType role){
+        public Builder(String name, Role role){
             this.name = name;
             this.role = role;
         }
 
-        public Builder name(String name) {
+        public T name(String name) {
             this.name = name;
-            return this;
+            return getThis();
         }
 
-        public Builder role(RoleType role) {
+        public T role(Role role) {
             this.role = role;
-            return this;
+            return getThis();
         }
 
-        public Builder university(String university) {
+        public T university(String university) {
             this.university = university;
-            return this;
+            return getThis();
         }
 
-        public Builder gender(Sex gender) {
-            this.gender = gender;
-            return this;
+        public T sex(Sex sex) {
+            this.sex = sex;
+            return getThis();
         }
 
-        public Builder country(String country) {
+        public T country(String country) {
             this.country = country;
-            return this;
+            return getThis();
         }
 
-        public Builder telephoneNumber(String telephoneNumber) {
+        public T telephoneNumber(String telephoneNumber) {
             this.telephoneNumber = telephoneNumber;
-            return this;
+            return getThis();
         }
 
-        public Builder email(String email){
+        public T email(String email){
             this.email = email;
-            return this;
+            return getThis();
         }
-
+        public abstract T getThis();
 
         public abstract AbstractEmployee build();
 

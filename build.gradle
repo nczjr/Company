@@ -9,16 +9,17 @@ repositories {
 }
 
 dependencies {
-    compile group: 'com.google.guava', name: 'guava', version: '22.0' # or 22.0-android for the Android flavor
-}
-mainClassName = "App"
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 
-jar {
-    manifest {
-        attributes "Main-Class": "$mainClassName"
-    }
-
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
 }
+//mainClassName = "App"
+//
+//jar {
+//    manifest {
+//        attributes "Main-Class": "$mainClassName"
+//    }
+//
+//    from {
+//        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+//    }
+//}

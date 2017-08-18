@@ -1,7 +1,7 @@
-public enum RoleType {
+public enum Role {
     CEO,
-    DEVELOPER,
     CONTRIBUTOR,
+    DEVELOPER,
     TEAM_LEADER,
     TESTER
 

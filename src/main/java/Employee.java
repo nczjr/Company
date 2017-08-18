@@ -1,5 +1,5 @@
 public interface Employee {
-    RoleType getRole();
+    Role getRole();
     String getName();
     void assign(Task... task);
     Report reportWork();

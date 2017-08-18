@@ -1,8 +1,5 @@
 
 public class Developer extends AbstractEmployee {
-//    public Developer(String name){
-//        super(name,RoleType.DEVELOPER);
-//    }
 
     public Developer(Builder builder) {
         super(builder);
@@ -15,16 +12,23 @@ public class Developer extends AbstractEmployee {
     }
 
 
-    public static class Builder extends AbstractEmployee.Builder {
+    public static class Builder extends AbstractEmployee.Builder<Builder>{
 
-        public Builder(){
-            role(RoleType.DEVELOPER);
+        private Builder(){
+            super();
+            role(Role.DEVELOPER);
         }
 
-        public Builder(String name){
-            super(name,RoleType.DEVELOPER);
+        public Builder(String name,Role role){
+            super(name, role);
         }
 
+        @Override
+        public Builder getThis() {
+            return this;
+        }
+
+        @Override
         public Developer build() {
             return new Developer(this);
         }

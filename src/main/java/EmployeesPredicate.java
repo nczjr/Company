@@ -7,21 +7,21 @@ public class EmployeesPredicate {
         return employee -> !employee.getName().isEmpty();
     }
     public static Predicate<Employee> isWoman(){
-        return employee -> employee.getSex().name().equalsIgnoreCase("female");
+        return employee -> employee.getSex().name() != null && employee.getSex().name().equalsIgnoreCase("female");
     }
     public static Predicate<Employee> isMan(){
-        return employee -> employee.getSex().name().equalsIgnoreCase("male");
+        return employee -> employee.getSex().name() != null && employee.getSex().name().equalsIgnoreCase("male");
     }
     public static Predicate<Employee> isFromAGH(){
-        return employee -> employee.getUniversity().equalsIgnoreCase("agh");
+        return employee -> employee.getUniversity() != null && employee.getUniversity().equalsIgnoreCase("agh");
     }
 
     public static Predicate<Employee> isFromPoland(){
-        return employee -> employee.getCountry().equalsIgnoreCase("poland");
+        return employee -> employee.getCountry() != null && employee.getCountry().equalsIgnoreCase("poland");
     }
 
     public static Predicate<Employee> hasGmailAccount(){
-        return employee -> employee.getEmail().endsWith("@gmail.com");
+        return employee -> employee.getEmail() != null && employee.getEmail().endsWith("@gmail.com");
     }
 
     public static ArrayList<Employee> filterEmployees(ArrayList<Employee> employees, Predicate<Employee> predicate){

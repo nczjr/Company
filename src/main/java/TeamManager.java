@@ -31,14 +31,7 @@ public class TeamManager extends AbstractEmployee implements Manager {
 
     @Override
     public void fire(Employee employee) {
-        if (!employeesArray.contains(employee))
-            System.out.println("You cannot fire anyone, you do not have such employee hired!");
-        else {
-            String name = employee.getName();
-            employeesArray.remove(employee);
-            System.out.println(name + " got fired!");
-
-        }
+        employeesArray.remove(employee);
     }
 
     @Override
@@ -52,15 +45,13 @@ public class TeamManager extends AbstractEmployee implements Manager {
     public void hire(Employee employee) {
         if (!employeesArray.contains(employee) && canHire(employee)) {
                 employeesArray.add(employee);
-                System.out.println(this.getName() + " hired " + employee.getName());
-        } else System.out.println("Cannot hire employee!");
+        }
     }
 
     public void assign(Task... task) {
         for (Task t: task) {
             if (!employeesArray.isEmpty()) {
                 AbstractEmployee employeeToBeSigned = (AbstractEmployee) min(employeesArray, comparing(employee -> employee.getReport().getHoursWorked()));
-                System.out.println(this.getName() + " assigned " + employeeToBeSigned.getName() + " to the task" );
                 employeeToBeSigned.assign(t);
                 report.add(t);
             }
@@ -69,7 +60,11 @@ public class TeamManager extends AbstractEmployee implements Manager {
 
     @Override
     public Report reportWork() {
-        return this.report;
+        if (getRole().compareTo(Role.CEO) == 0){
+            return report();
+        }else{
+            return this.report;
+        }
     }
 
     @Override
@@ -79,14 +74,30 @@ public class TeamManager extends AbstractEmployee implements Manager {
 
     @Override
     public boolean canHire(Employee employee) {
-        if (!canHire())
-            return false;
-        else return employeesPredicate.test(employee);
+        return canHire() && employeesPredicate.test(employee);
     }
 
 
-    @Override
-    public Report getReport() {
+    public Report report() {
+            sort(getEmployeesArray(),
+                    employeeComparator(new Comparator<Employee>() {
+                        @Override
+                        public int compare(Employee o1, Employee o2) {
+                            return o1.getName().compareTo(o2.getName());
+                        }
+                    }, new Comparator<Employee>() {
+                        public int compare(Employee o1, Employee o2) {
+                            return o1.getRole().compareTo(o2.getRole());
+                        }
+                    }, new Comparator<Employee>() {
+                        @Override
+                        public int compare(Employee o1, Employee o2) {
+                            return o1.getReport().getHoursWorked()-o2.getReport().getHoursWorked();
+                        }
+                    }));
+        for (Employee e: getEmployeesArray())
+                reports.add(e.getReport());
+
         return report;
     }
 
@@ -98,14 +109,29 @@ public class TeamManager extends AbstractEmployee implements Manager {
                 super.toString();
     }
 
-    public static class Builder extends AbstractEmployee.Builder {
+    public static Comparator<Employee>  employeeComparator(Comparator<? super Employee> comp1,Comparator<? super Employee> comp2,Comparator<? super Employee> comp3) {
+        return new Comparator<Employee>() {
+            @Override
+            public int compare(Employee o1, Employee o2) {
+                int result = comp1.compare(o1,o2);
+                if (result != 0) return result;
+                else {
+                    int res = comp2.compare(o1, o2);
+                    if (res != 0) return res;
+                    else return comp3.compare(o1,o2);
+                }
+            }
+        };
+    }
+
+    public static class Builder extends AbstractEmployee.Builder<Builder>{
 
         private int maxNumEmployes;
         private Predicate<Employee> employeesPredicate;
 
 
-        public Builder(String name, int maxNumEmployes){
-            super(name,RoleType.TEAM_LEADER);
+        public Builder(String name, Role role,int maxNumEmployes){
+            super(name,role);
             this.maxNumEmployes = maxNumEmployes;
             this.employeesPredicate = EmployeesPredicate.allEmployees();
         }
@@ -119,6 +145,12 @@ public class TeamManager extends AbstractEmployee implements Manager {
             this.employeesPredicate = employeesPredicate;
             return this;
         }
+
+        @Override
+        public Builder getThis() {
+            return this;
+        }
+
         @Override
         public TeamManager build() {
             return new TeamManager(this);
