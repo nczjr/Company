@@ -1,8 +1,12 @@
+package employee;
+
+import employee.Employee;
+
 import java.util.ArrayList;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class EmployeesPredicate {
+public class HireStrategy {
     public static Predicate<Employee> allEmployees(){
         return employee -> !employee.getName().isEmpty();
     }

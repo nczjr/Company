@@ -1,3 +1,7 @@
+package employee;
+
+import task.Report;
+
 public abstract class AbstractEmployee implements Employee {
     private final String name;
     private final Role role;
@@ -58,6 +62,7 @@ public abstract class AbstractEmployee implements Employee {
     public Report reportWork(){
         return this.report;
     }
+
 
     @Override
     public String toString() {

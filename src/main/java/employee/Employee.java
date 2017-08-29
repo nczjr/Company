@@ -1,3 +1,8 @@
+package employee;
+
+import task.Report;
+import task.Task;
+
 public interface Employee {
     Role getRole();
     String getName();

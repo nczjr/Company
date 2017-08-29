@@ -1,3 +1,5 @@
+import employee.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -9,7 +11,7 @@ public class EmployeeFactory {
 
     public static Employee getEmployee(String employeeType){
         switch (employeeType){
-            case "developer": return new Developer.Builder(generateString(),Role.DEVELOPER)
+            case "developer": return new Developer.Builder(generateString(), Role.DEVELOPER)
                                 .university(getUniversity())
                                 .sex(getSex())
                                 .country(getCountry())

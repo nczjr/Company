@@ -1,3 +1,6 @@
+package employee;
+
+import task.Task;
 
 public class Developer extends AbstractEmployee {
 
@@ -19,7 +22,7 @@ public class Developer extends AbstractEmployee {
             role(Role.DEVELOPER);
         }
 
-        public Builder(String name,Role role){
+        public Builder(String name, Role role){
             super(name, role);
         }
 
