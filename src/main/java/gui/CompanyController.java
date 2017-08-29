@@ -25,7 +25,7 @@ public class CompanyController {
 
     @FXML
     void addEmployee(ActionEvent event) {
-        personalDetails.setText("");
+        personalDetails.setText("whateva");
 
     }
 
