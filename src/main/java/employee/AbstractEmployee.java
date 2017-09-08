@@ -23,6 +23,17 @@ public abstract class AbstractEmployee implements Employee {
         this.email = builder.email;
     }
 
+    AbstractEmployee(String name, Role role){
+        this.name = name;
+        this.role = role;
+        this.report = new Report();
+        this.university = "";
+        this.sex = Sex.FEMALE;
+        this.country = "";
+        this.email = name + "@gmail.com";
+        this.telephoneNumber = "123456789";
+    }
+
 
     @Override
     public Role getRole() {
@@ -86,11 +97,11 @@ public abstract class AbstractEmployee implements Employee {
         private String email;
 
 
-        public Builder(){
+        Builder(){
 
         }
 
-        public Builder(String name, Role role){
+        Builder(String name, Role role){
             this.name = name;
             this.role = role;
         }

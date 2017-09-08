@@ -20,15 +20,21 @@ public class TeamManager extends AbstractEmployee implements Manager {
     private ArrayList<Report> reports;
 
 
-    public TeamManager(Builder builder){
+    TeamManager(Builder builder){
         super(builder);
-        this.employeesArray = new ArrayList<Employee>(builder.maxNumEmployes);
+        this.employeesArray = new ArrayList<>(builder.maxNumEmployes);
         this.report = new Report();
         this.maxNumEmployes = builder.maxNumEmployes;
         this.hireStrategy = builder.hireStrategy;
 
     }
 
+    public TeamManager(String name, Role role, int maxNumEmployes){
+        super(name,role);
+        this.maxNumEmployes = maxNumEmployes;
+        this.employeesArray = new ArrayList<>(maxNumEmployes);
+        this.report = new Report();
+    }
     public ArrayList<Employee> getEmployeesArray() {
         return employeesArray;
     }
@@ -85,8 +91,7 @@ public class TeamManager extends AbstractEmployee implements Manager {
 
 
     public ArrayList<Report> getReports(){
-        sort(getEmployeesArray(),
-                new EmployeeComparator().getComparator());
+        getEmployeesArray().sort(new EmployeeComparator().getComparator());
         for (Employee e: getEmployeesArray())
             if (e.reportWork().getHoursWorked() != 0){
 

@@ -1,3 +1,5 @@
+package generator;
+
 import employee.Employee;
 import employee.Role;
 import employee.TeamManager;
@@ -10,6 +12,10 @@ import java.util.Random;
 public class Generator {
     private static ArrayList<TeamManager> managers;
     private static int numberOfManagers;
+
+    public static ArrayList<TeamManager> getManagers(){
+        return managers;
+    }
 
     public static void generate(int numberOfManag){
         numberOfManagers = numberOfManag;
@@ -60,10 +66,10 @@ public class Generator {
     private static ArrayList<Employee> generateEmployees(int size){
         ArrayList<Employee> employees = new ArrayList<>(size);
         for (int i = 0; i < size; i++){
-            employees.add(i,EmployeeFactory.getEmployee("developer"));
+            employees.add(i, EmployeeFactory.getEmployee("developer"));
             if ((i+1) < size) {
                 i++;
-                employees.add(i,EmployeeFactory.getEmployee("tester"));
+                employees.add(i, EmployeeFactory.getEmployee("tester"));
             }
         }
         return employees;

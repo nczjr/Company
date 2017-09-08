@@ -4,7 +4,7 @@ import task.Task;
 
 public class Developer extends AbstractEmployee {
 
-    public Developer(Builder builder) {
+    Developer(Builder builder) {
         super(builder);
     }
     public void assign(Task... task){
@@ -12,6 +12,10 @@ public class Developer extends AbstractEmployee {
             t.perform();
             this.getReport().add(t);
         }
+    }
+
+    public Developer(String name){
+        super(name,Role.DEVELOPER);
     }
 
 
