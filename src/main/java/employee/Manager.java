@@ -1,7 +1,5 @@
 package employee;
 
-import employee.Employee;
-
 import java.util.ArrayList;
 
 public interface Manager extends Employee {

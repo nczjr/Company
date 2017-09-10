@@ -17,11 +17,11 @@ public class Generator {
         return managers;
     }
 
-    public static void generate(int numberOfManag){
+    public static void generate(int numberOfManag,int numberOfMaxEmployees){
         numberOfManagers = numberOfManag;
         Random random = new Random();
         managers = new ArrayList<>(numberOfManagers);
-        int size = random.nextInt(5);
+        int size = random.nextInt(numberOfMaxEmployees);
         if (size >=1 ) {
             managers.add(0, (TeamManager) EmployeeFactory.getEmployee("ceo"));
             System.out.println("Ceo : " + managers.get(0).getName());

@@ -1,5 +1,6 @@
 package employee;
 
+import javafx.beans.property.SimpleStringProperty;
 import task.Report;
 
 public abstract class AbstractEmployee implements Employee {
@@ -11,6 +12,7 @@ public abstract class AbstractEmployee implements Employee {
     private final String country;
     private final String telephoneNumber;
     private final String email;
+    private final SimpleStringProperty simpleStringPropertyName = new SimpleStringProperty("");
 
     AbstractEmployee(Builder builder){
         this.name = builder.name;
@@ -21,6 +23,7 @@ public abstract class AbstractEmployee implements Employee {
         this.country = builder.country;
         this.telephoneNumber = builder.telephoneNumber;
         this.email = builder.email;
+        simpleStringPropertyName.set(name);
     }
 
     AbstractEmployee(String name, Role role){
@@ -32,8 +35,12 @@ public abstract class AbstractEmployee implements Employee {
         this.country = "";
         this.email = name + "@gmail.com";
         this.telephoneNumber = "123456789";
+        simpleStringPropertyName.set(name);
     }
 
+    public SimpleStringProperty getSimpleStringPropertyName() {
+        return simpleStringPropertyName;
+    }
 
     @Override
     public Role getRole() {

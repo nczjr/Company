@@ -1,7 +1,5 @@
 package task;
 
-import task.Task;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,7 @@ public class Report {
 
     public Report(){
         hoursWorked = 0;
-        tasks = new ArrayList<Task>(1);
+        tasks = new ArrayList<>(1);
     }
 
 
@@ -36,15 +34,14 @@ public class Report {
     }
 
     public String toString(){
-        if (tasks.isEmpty()){
-            String s = " 0 tasks performed \n";
-            return s;
-        }else{
-            String s = ("All tasks performed are:  \n" );
+        if (tasks.isEmpty())
+            return " 0 tasks performed \n";
+        else{
+            StringBuilder stringBuilder = new StringBuilder();
             for (Task task: tasks) {
-                s += task + "\n";
+                stringBuilder.append(task).append("\n");
             }
-            return s;
+            return stringBuilder.toString();
         }
 
     }

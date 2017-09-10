@@ -1,5 +1,6 @@
 package employee;
 
+import javafx.beans.property.SimpleStringProperty;
 import task.Report;
 import task.Task;
 
@@ -14,5 +15,6 @@ public interface Employee {
     String getCountry();
     String getTelephoneNumber();
     String getEmail();
+    SimpleStringProperty getSimpleStringPropertyName();
 
 }

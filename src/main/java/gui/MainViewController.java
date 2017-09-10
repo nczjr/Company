@@ -1,10 +1,11 @@
 package gui;
 
-import employee.*;
-import generator.Main;
+import employee.Developer;
+import employee.Employee;
+import employee.Role;
+import employee.TeamManager;
 import generator.Generator;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import generator.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,14 +14,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import task.Report;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class MainViewController {
-
-    private Main main;
 
     @FXML
     private MenuBar menuBar;
@@ -32,22 +30,36 @@ public class MainViewController {
     private MenuItem addEmployeeButton;
 
     @FXML
-    private TreeView<String> tree;
+    private TreeTableView<Employee> tree;
+
+    @FXML
+    private TreeTableColumn<Employee,String> treeColumn;
 
     @FXML
     private TextArea personalDetails;
 
     @FXML
     private TextArea report;
+    @FXML
+    private TextField maxNumOfEmployees;
 
     @FXML
-    public void initialize(){
+    private TextField size;
+
+    @FXML
+    private Button cancelButton;
+
+    @FXML
+    private Button generateButton;
+
+    @FXML
+    void addFunction(ActionEvent event) {
 
     }
 
+
     @FXML
     void addEmployee(ActionEvent event) throws IOException {
-        personalDetails.setText("whateva");
 
         AnchorPane anchorPane = FXMLLoader.load(Main.class.getClassLoader().getResource("addEmployeeView.fxml"));
         Stage newStage = new Stage();
@@ -60,7 +72,7 @@ public class MainViewController {
     }
 
     private void prepareNewItem(TeamManager teamManager,TreeItem rootItem){
-            TreeItem<String> newManager = new TreeItem<>(teamManager.getName());
+            TreeItem<Employee> newManager = new TreeItem<>(teamManager);
             newManager.setExpanded(true);
             addEmployees(newManager, teamManager);
             rootItem.getChildren().add(newManager);
@@ -70,20 +82,43 @@ public class MainViewController {
             for (Employee e : teamManager.getEmployeesArray()) {
                 if (e.getRole() == Role.TEAM_LEADER)
                     prepareNewItem((TeamManager) e, managerItem);
-                else managerItem.getChildren().add(new TreeItem<>(e.getName()));
+                else managerItem.getChildren().add(new TreeItem<>(e));
             }
         }
 
     @FXML
-    void generateCompany(ActionEvent event) {
-        Generator.generate(3);
+    void generateCompany(ActionEvent event) throws IOException {
+        AnchorPane anchorPane = FXMLLoader.load(Main.class.getClassLoader().getResource("generateCompanyView.fxml"));
+        Stage newStage = new Stage();
+        newStage.setTitle("Generate company");
+        newStage.initModality(Modality.WINDOW_MODAL);
+        newStage.initOwner(Main.getPrimaryStage());
+        Scene scene = new Scene(anchorPane);
+        newStage.setScene(scene);
+        newStage.show();
+    }
+
+
+    @FXML
+    void generate(ActionEvent event){
+        Stage stage = (Stage) generateButton.getScene().getWindow();
+        int sizeOfCompany = Integer.parseInt(size.getText());
+        int maxNum = Integer.parseInt(maxNumOfEmployees.getText());
+        stage.hide();
+        stage.getOwner();
+        showCompany(sizeOfCompany,maxNum);
+    }
+
+    private void showCompany(int size,int maxNumOfEmployees){
+        Generator.generate(size,maxNumOfEmployees);
         ArrayList<TeamManager> employees = Generator.getManagers();
-        TreeItem<String> root = new TreeItem<>("Company Name: ");
+        TreeItem<Employee> root = new TreeItem<>(new Developer(""));
         tree.setRoot(root);
+        tree.setShowRoot(false);
         root.setExpanded(true);
 
         TeamManager ceo = employees.get(0);
-        TreeItem<String> managerItem = new TreeItem<>(ceo.getName());
+        TreeItem<Employee> managerItem = new TreeItem<>(ceo);
         root.getChildren().add(managerItem);
 
         ArrayList<Employee> managerEmployees = ceo.getEmployeesArray();
@@ -94,22 +129,37 @@ public class MainViewController {
             if (e.getRole() == Role.TEAM_LEADER) {
                 prepareNewItem((TeamManager) e,managerItem);
             }else{
-                    managerItem.getChildren().add(new TreeItem<>(e.getName()));
+                managerItem.getChildren().add(new TreeItem<>(e));
             }
-            tree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<String>>() {
-
-                @Override
-                public void changed(ObservableValue<? extends TreeItem<String>> observable,
-                                    TreeItem<String> old_val, TreeItem<String> new_val) {
-                    TreeItem<String> selectedItem = new_val;
-                    System.out.println("Selected Text : " + selectedItem.getValue());
-                    Optional<TeamManager> e = Generator.getManagers().stream().filter(empl -> empl.getName().equals(selectedItem.getValue())).findFirst();
-                }
-
-            });
 
         }   tree.setRoot(root);
-
+        treeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Employee, String> param) -> param.getValue().getValue().getSimpleStringPropertyName());
+        tree.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            report.setText(newSelection.getValue().reportWork().toString());
+            fillPersonalDetails(newSelection);
+        });
     }
+
+    private void fillPersonalDetails(TreeItem<Employee> selectedItem){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Name: ").append(selectedItem.getValue().getName()).append("\n");
+        stringBuilder.append("Role: ").append(selectedItem.getValue().getRole()).append("\n");
+        stringBuilder.append("University: ").append(selectedItem.getValue().getUniversity()).append("\n");
+        stringBuilder.append("Email: ").append(selectedItem.getValue().getEmail()).append("\n");
+        stringBuilder.append("Telephone number: ").append(selectedItem.getValue().getTelephoneNumber()).append("\n");
+        stringBuilder.append("Country: ").append(selectedItem.getValue().getCountry()).append("\n");
+        stringBuilder.append("Sex: ").append(selectedItem.getValue().getSex()).append("\n");
+
+        if (selectedItem.getValue().getRole() == Role.TEAM_LEADER || selectedItem.getValue().getRole() == Role.CEO) {
+            TeamManager teamManager = (TeamManager) selectedItem.getValue();
+            stringBuilder.append("Currently has: ").append(teamManager.getEmployeesArray().size()).append(" employees \n");
+            stringBuilder.append("Hire strategy: ").append(teamManager.getHireStrategy()).append("\n");
+            stringBuilder.append("Max number of employees: ").append(teamManager.getMaxNumEmployes()).append("\n");
+        }
+
+        personalDetails.setText(stringBuilder.toString());
+    }
+
+
 
 }

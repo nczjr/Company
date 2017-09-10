@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.function.Predicate;
 
 import static java.util.Collections.min;
-import static java.util.Collections.sort;
 import static java.util.Comparator.comparing;
 
 
@@ -37,6 +36,24 @@ public class TeamManager extends AbstractEmployee implements Manager {
     }
     public ArrayList<Employee> getEmployeesArray() {
         return employeesArray;
+    }
+
+    public int getMaxNumEmployes() {
+        return maxNumEmployes;
+    }
+
+    public String getHireStrategy() {
+        if (hireStrategy== HireStrategy.hasGmailAccount())
+            return "only employees with gmail account";
+        else if (hireStrategy == HireStrategy.isFromAGH())
+            return "only employees from AGH";
+        else if (hireStrategy == HireStrategy.isFromPoland())
+            return "only employees from Poland";
+        else if (hireStrategy == HireStrategy.isWoman())
+            return "only women";
+        else if (hireStrategy == HireStrategy.isMan())
+            return "only men";
+        else return "all employees can be hired";
     }
 
     @Override
