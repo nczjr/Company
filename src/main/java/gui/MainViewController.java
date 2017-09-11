@@ -40,24 +40,15 @@ public class MainViewController {
 
     @FXML
     private TextArea report;
-    @FXML
-    private TextField maxNumOfEmployees;
 
     @FXML
-    private TextField size;
-
-    @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Button generateButton;
-
-    @FXML
-    void addFunction(ActionEvent event) {
-
+    private void initialize(){
+        tree = new TreeTableView<>();
+        TreeItem<Employee> root = new TreeItem<>(new Developer(""));
+        tree.setRoot(root);
+        tree.setShowRoot(false);
+        root.setExpanded(true);
     }
-
-
     @FXML
     void addEmployee(ActionEvent event) throws IOException {
 
@@ -71,55 +62,47 @@ public class MainViewController {
         newStage.showAndWait();
     }
 
-    private void prepareNewItem(TeamManager teamManager,TreeItem rootItem){
-            TreeItem<Employee> newManager = new TreeItem<>(teamManager);
-            newManager.setExpanded(true);
-            addEmployees(newManager, teamManager);
-            rootItem.getChildren().add(newManager);
-    }
-
-    private void addEmployees(TreeItem managerItem,TeamManager teamManager){
-            for (Employee e : teamManager.getEmployeesArray()) {
-                if (e.getRole() == Role.TEAM_LEADER)
-                    prepareNewItem((TeamManager) e, managerItem);
-                else managerItem.getChildren().add(new TreeItem<>(e));
-            }
-        }
-
     @FXML
     void generateCompany(ActionEvent event) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(Main.class.getClassLoader().getResource("generateCompanyView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("generateCompanyView.fxml"));
+        AnchorPane anchorPane = loader.load();
         Stage newStage = new Stage();
         newStage.setTitle("Generate company");
         newStage.initModality(Modality.WINDOW_MODAL);
         newStage.initOwner(Main.getPrimaryStage());
         Scene scene = new Scene(anchorPane);
         newStage.setScene(scene);
-        newStage.show();
+        newStage.showAndWait();
+    }
+
+    private void prepareNewItem(TeamManager teamManager,TreeItem rootItem){
+        TreeItem<Employee> newManager = new TreeItem<>(teamManager);
+        newManager.setExpanded(true);
+        addEmployees(newManager, teamManager);
+        rootItem.getChildren().add(newManager);
+    }
+
+    private void addEmployees(TreeItem managerItem,TeamManager teamManager){
+        for (Employee e : teamManager.getEmployeesArray()) {
+            if (e.getRole() == Role.TEAM_LEADER)
+                prepareNewItem((TeamManager) e, managerItem);
+            else managerItem.getChildren().add(new TreeItem<>(e));
+        }
     }
 
 
-    @FXML
-    void generate(ActionEvent event){
-        Stage stage = (Stage) generateButton.getScene().getWindow();
-        int sizeOfCompany = Integer.parseInt(size.getText());
-        int maxNum = Integer.parseInt(maxNumOfEmployees.getText());
-        stage.hide();
-        stage.getOwner();
-        showCompany(sizeOfCompany,maxNum);
-    }
-
-    private void showCompany(int size,int maxNumOfEmployees){
+    public void showCompany(int size, int maxNumOfEmployees){
         Generator.generate(size,maxNumOfEmployees);
         ArrayList<TeamManager> employees = Generator.getManagers();
-        TreeItem<Employee> root = new TreeItem<>(new Developer(""));
-        tree.setRoot(root);
-        tree.setShowRoot(false);
-        root.setExpanded(true);
+//        TreeItem<Employee> root = new TreeItem<>(new Developer(""));
+//        tree.setRoot(root);
+//        tree.setShowRoot(false);
+//        root.setExpanded(true);
 
         TeamManager ceo = employees.get(0);
         TreeItem<Employee> managerItem = new TreeItem<>(ceo);
-        root.getChildren().add(managerItem);
+
+        tree.getRoot().getChildren().add(managerItem);
 
         ArrayList<Employee> managerEmployees = ceo.getEmployeesArray();
 
@@ -132,7 +115,7 @@ public class MainViewController {
                 managerItem.getChildren().add(new TreeItem<>(e));
             }
 
-        }   tree.setRoot(root);
+        }   tree.setRoot(tree.getRoot());
         treeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Employee, String> param) -> param.getValue().getValue().getSimpleStringPropertyName());
         tree.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             report.setText(newSelection.getValue().reportWork().toString());
