@@ -71,44 +71,22 @@ public class MainViewController {
     }
 
     private void prepareNewItem(TeamManager teamManager,TreeItem rootItem){
-            TreeItem<Employee> newManager = new TreeItem<>(teamManager);
-            newManager.setExpanded(true);
-            addEmployees(newManager, teamManager);
-            rootItem.getChildren().add(newManager);
+        TreeItem<Employee> newManager = new TreeItem<>(teamManager);
+        newManager.setExpanded(true);
+        addEmployees(newManager, teamManager);
+        rootItem.getChildren().add(newManager);
     }
 
     private void addEmployees(TreeItem managerItem,TeamManager teamManager){
-            for (Employee e : teamManager.getEmployeesArray()) {
-                if (e.getRole() == Role.TEAM_LEADER)
-                    prepareNewItem((TeamManager) e, managerItem);
-                else managerItem.getChildren().add(new TreeItem<>(e));
-            }
+        for (Employee e : teamManager.getEmployeesArray()) {
+            if (e.getRole() == Role.TEAM_LEADER)
+                prepareNewItem((TeamManager) e, managerItem);
+            else managerItem.getChildren().add(new TreeItem<>(e));
         }
-
-    @FXML
-    void generateCompany(ActionEvent event) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(Main.class.getClassLoader().getResource("generateCompanyView.fxml"));
-        Stage newStage = new Stage();
-        newStage.setTitle("Generate company");
-        newStage.initModality(Modality.WINDOW_MODAL);
-        newStage.initOwner(Main.getPrimaryStage());
-        Scene scene = new Scene(anchorPane);
-        newStage.setScene(scene);
-        newStage.show();
     }
 
 
-    @FXML
-    void generate(ActionEvent event){
-        Stage stage = (Stage) generateButton.getScene().getWindow();
-        int sizeOfCompany = Integer.parseInt(size.getText());
-        int maxNum = Integer.parseInt(maxNumOfEmployees.getText());
-        stage.hide();
-        stage.getOwner();
-        showCompany(sizeOfCompany,maxNum);
-    }
-
-    private void showCompany(int size,int maxNumOfEmployees){
+    public void showCompany(int size, int maxNumOfEmployees){
         Generator.generate(size,maxNumOfEmployees);
         ArrayList<TeamManager> employees = Generator.getManagers();
         TreeItem<Employee> root = new TreeItem<>(new Developer(""));
