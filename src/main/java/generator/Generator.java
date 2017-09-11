@@ -12,17 +12,21 @@ import java.util.Random;
 public class Generator {
     private static ArrayList<TeamManager> managers;
     private static int numberOfManagers;
+    private static int numberOfMaxEmployees;
+
+    public static int getNumberOfMaxEmployees() {
+        return numberOfMaxEmployees;
+    }
 
     public static ArrayList<TeamManager> getManagers(){
         return managers;
     }
 
-    public static void generate(int numberOfManag,int numberOfMaxEmployees){
-        numberOfManagers = numberOfManag;
-        Random random = new Random();
+    public static void generate(int numberOfManag,int numberOfMaxEmpl){
+        numberOfManagers = numberOfManag-1;
+        numberOfMaxEmployees = numberOfMaxEmpl;
         managers = new ArrayList<>(numberOfManagers);
-        int size = random.nextInt(numberOfMaxEmployees);
-        if (size >=1 ) {
+        if (numberOfManagers >=1 ) {
             managers.add(0, (TeamManager) EmployeeFactory.getEmployee("ceo"));
             System.out.println("Ceo : " + managers.get(0).getName());
             for (int i = 1; i < numberOfManagers; i++) {
@@ -32,13 +36,13 @@ public class Generator {
             generateStructure();
             for (int i = 0; i < numberOfManagers; i++)
             {
-                managers.get(i).hire(generateEmployees(size));
+                managers.get(i).hire(generateEmployees(numberOfMaxEmployees));
                 System.out.println(managers.get(i).getName() + " hires as follows ");
                 for (Employee e : managers.get(i).getEmployeesArray())
                     System.out.println(e.getName() + " got hired");
             }
             //for (int i = 0; i < numberOfManagers; i++)
-                managers.get(0).assign(generateTasks(size));
+                managers.get(0).assign(generateTasks(numberOfMaxEmployees));
         } else generateEmployees(numberOfManag);
 
     }

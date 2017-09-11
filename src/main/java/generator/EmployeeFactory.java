@@ -26,7 +26,7 @@ class EmployeeFactory {
             }
             case "tester":{
                 String name = generateString();
-                return new Developer.Builder(generateString(),Role.TESTER)
+                return new Developer.Builder(name,Role.TESTER)
                         .university(getUniversity())
                         .sex(getSex())
                         .country(getCountry())
@@ -36,7 +36,7 @@ class EmployeeFactory {
             }
             case "teamManager": {
                 String name = generateString();
-                return new TeamManager.Builder(generateString(),Role.TEAM_LEADER,5)
+                return new TeamManager.Builder(name,Role.TEAM_LEADER,Generator.getNumberOfMaxEmployees())
                         .university(getUniversity())
                         .sex(getSex())
                         .country(getCountry())
@@ -46,7 +46,7 @@ class EmployeeFactory {
             }
             case "ceo": {
                 String name = generateString();
-                return new TeamManager.Builder(generateString(),Role.CEO,5)
+                return new TeamManager.Builder(name,Role.CEO,Generator.getNumberOfMaxEmployees())
                         .university(getUniversity())
                         .sex(getSex())
                         .country(getCountry())
@@ -56,7 +56,7 @@ class EmployeeFactory {
             }
             default: {
                 String name = generateString();
-                return new Developer.Builder(generateString(),Role.CONTRIBUTOR)
+                return new Developer.Builder(name,Role.CONTRIBUTOR)
                         .university(getUniversity())
                         .sex(getSex())
                         .country(getCountry())
