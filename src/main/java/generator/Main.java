@@ -15,7 +15,7 @@ public class Main extends Application {
         Main.primaryStage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("mainView.fxml"));
         Main.primaryStage.setTitle("Company Builder");
-        Main.primaryStage.setScene(new Scene(root, 600, 400));
+        Main.primaryStage.setScene(new Scene(root, 600, 623));
         Main.primaryStage.show();
 
     }

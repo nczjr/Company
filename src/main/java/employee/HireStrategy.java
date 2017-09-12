@@ -32,8 +32,5 @@ public class HireStrategy {
                         .collect(Collectors.toCollection(ArrayList<Employee>::new));
     }
 
-    @Override
-    public String toString() {
-        return "HireStrategy{}";
-    }
+
 }

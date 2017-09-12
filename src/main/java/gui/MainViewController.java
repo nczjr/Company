@@ -41,11 +41,48 @@ public class MainViewController {
     @FXML
     private TextArea report;
 
+    @FXML
+    private Button hireEmployeeButton;
+
+    @FXML
+    private Button assignTaskButton;
+
+    @FXML
+    private Button fireEmployeeButton;
+
+    @FXML
+    private Label error;
 
     @FXML
     void addEmployee(ActionEvent event) throws IOException {
 
         AnchorPane anchorPane = FXMLLoader.load(Main.class.getClassLoader().getResource("addEmployeeView.fxml"));
+        Stage newStage = new Stage();
+        newStage.setTitle("Add a new employee");
+        newStage.initModality(Modality.WINDOW_MODAL);
+        newStage.initOwner(Main.getPrimaryStage());
+        Scene scene = new Scene(anchorPane);
+        newStage.setScene(scene);
+        newStage.showAndWait();
+
+    }
+
+    @FXML
+    void assignTask(ActionEvent event) {
+
+    }
+
+    @FXML
+    void fireEmployee(ActionEvent event) {
+
+    }
+
+
+    @FXML
+    void hireEmployee(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("addEmployeeView.fxml"));
+        AnchorPane anchorPane = loader.load();
+        AddEmployeeController controller = loader.getController();
         Stage newStage = new Stage();
         newStage.setTitle("Add new employee");
         newStage.initModality(Modality.WINDOW_MODAL);
@@ -53,7 +90,9 @@ public class MainViewController {
         Scene scene = new Scene(anchorPane);
         newStage.setScene(scene);
         newStage.showAndWait();
+        tree.getSelectionModel().getSelectedItem().getValue();
     }
+
 
     @FXML
     void generateCompany(ActionEvent event) throws IOException {
@@ -67,7 +106,8 @@ public class MainViewController {
         Scene scene = new Scene(anchorPane);
         newStage.setScene(scene);
         newStage.showAndWait();
-        showCompany(controller.getSizeOfCompany(),controller.getMaxNum());
+        if (controller.canCreate())
+            showCompany(controller.getSizeOfCompany(),controller.getMaxNum());
     }
 
     private void prepareNewItem(TeamManager teamManager,TreeItem rootItem){
@@ -86,7 +126,7 @@ public class MainViewController {
     }
 
 
-    public void showCompany(int size, int maxNumOfEmployees){
+    private void showCompany(int size, int maxNumOfEmployees){
         Generator.generate(size,maxNumOfEmployees);
         ArrayList<TeamManager> employees = Generator.getManagers();
         TreeItem<Employee> root = new TreeItem<>(new Developer(""));
@@ -115,6 +155,10 @@ public class MainViewController {
         tree.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             report.setText(newSelection.getValue().reportWork().toString());
             fillPersonalDetails(newSelection);
+            if (newSelection.getValue().getRole()!= Role.TEAM_LEADER || newSelection.getValue().getRole()!= Role.TEAM_LEADER) {
+                hireEmployeeButton.setDisable(true);
+                fireEmployeeButton.setDisable(true);
+            }
         });
     }
 
