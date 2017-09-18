@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import task.Task;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,9 +54,37 @@ public class MainViewController {
     @FXML
     private Label error;
 
+    private TreeItem<Employee> selectedEmployee;
+
+
+    @FXML
+    private void initialize(){
+        fireEmployeeButton.setDisable(true);
+        assignTaskButton.setDisable(true);
+        tree.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            report.setText(newSelection.getValue().reportWork().toString());
+            fillPersonalDetails(newSelection);
+            hireEmployeeButton.setDisable(true);
+            fireEmployeeButton.setDisable(false);
+            assignTaskButton.setDisable(true);
+            selectedEmployee = newSelection;
+            if (newSelection.getValue().getRole() == Role.TEAM_LEADER
+                    || newSelection.getValue().getRole() == Role.CEO) {
+                hireEmployeeButton.setDisable(false);
+                assignTaskButton.setDisable(false);
+            }
+        });
+        personalDetails.setEditable(false);
+        personalDetails.setMouseTransparent(true);
+        personalDetails.setFocusTraversable(false);
+        report.setEditable(false);
+        //report.setMouseTransparent(true);
+        //report.setFocusTraversable(false);
+        treeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Employee, String> param) -> param.getValue().getValue().getSimpleStringPropertyName());
+
+    }
     @FXML
     void addEmployee(ActionEvent event) throws IOException {
-
         AnchorPane anchorPane = FXMLLoader.load(Main.class.getClassLoader().getResource("addEmployeeView.fxml"));
         Stage newStage = new Stage();
         newStage.setTitle("Add a new employee");
@@ -68,12 +97,26 @@ public class MainViewController {
     }
 
     @FXML
-    void assignTask(ActionEvent event) {
-
+    void assignTask(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("assignTaskView.fxml"));
+        AnchorPane anchorPane = loader.load();
+        AssignTaskViewController controller = loader.getController();
+        Stage newStage = new Stage();
+        newStage.setTitle("Assign task");
+        newStage.initModality(Modality.WINDOW_MODAL);
+        newStage.initOwner(Main.getPrimaryStage());
+        Scene scene = new Scene(anchorPane);
+        newStage.setScene(scene);
+        newStage.showAndWait();
+        if (controller.isTaskCreated())
+            selectedEmployee.getValue().assign(new Task(controller.getWorkUnits(),controller.getTaskName()));
     }
 
     @FXML
     void fireEmployee(ActionEvent event) {
+        TeamManager manager = (TeamManager) selectedEmployee.getParent().getValue();
+        manager.fire(selectedEmployee.getValue());
+        selectedEmployee.getParent().getChildren().remove(selectedEmployee);
 
     }
 
@@ -90,7 +133,28 @@ public class MainViewController {
         Scene scene = new Scene(anchorPane);
         newStage.setScene(scene);
         newStage.showAndWait();
-        tree.getSelectionModel().getSelectedItem().getValue();
+        if (controller.isSuccessfulCreation()) {
+            TreeItem<Employee> root;
+            if (selectedEmployee == null){
+                root = new TreeItem<>(new Developer(""));
+                tree.setRoot(root);
+                tree.setShowRoot(false);
+                root.setExpanded(true);
+                TreeItem<Employee> newItem = new TreeItem<>(controller.getCreatedEmployee());
+                root.getChildren().add(newItem);
+            }else {
+                root = selectedEmployee;
+                TeamManager manager = (TeamManager) root.getValue();
+                if (!manager.canHire(controller.getCreatedEmployee())) {
+                    new InvalidInput("This manager is hiring " + manager.getHireStrategy());
+                }
+                else {
+                    manager.hire(controller.getCreatedEmployee());
+                    TreeItem<Employee> newItem = new TreeItem<>(controller.getCreatedEmployee());
+                    root.getChildren().add(newItem);
+                }
+            }
+        }
     }
 
 
@@ -151,15 +215,7 @@ public class MainViewController {
             }
 
         }   tree.setRoot(tree.getRoot());
-        treeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Employee, String> param) -> param.getValue().getValue().getSimpleStringPropertyName());
-        tree.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            report.setText(newSelection.getValue().reportWork().toString());
-            fillPersonalDetails(newSelection);
-            if (newSelection.getValue().getRole()!= Role.TEAM_LEADER || newSelection.getValue().getRole()!= Role.TEAM_LEADER) {
-                hireEmployeeButton.setDisable(true);
-                fireEmployeeButton.setDisable(true);
-            }
-        });
+        //treeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Employee, String> param) -> param.getValue().getValue().getSimpleStringPropertyName());
     }
 
     private void fillPersonalDetails(TreeItem<Employee> selectedItem){

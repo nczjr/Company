@@ -32,5 +32,14 @@ public class HireStrategy {
                         .collect(Collectors.toCollection(ArrayList<Employee>::new));
     }
 
-
+    public static Predicate<Employee> getByName(String s){
+        switch (s){
+            case "only employees with gmail account": return hasGmailAccount();
+            case "only employees from AGH": return isFromAGH();
+            case "only employees from Poland": return isFromPoland();
+            case "only women": return isWoman();
+            case "only men": return isMan();
+            default: return allEmployees();
+        }
+    }
 }
