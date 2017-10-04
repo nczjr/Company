@@ -1,3 +1,8 @@
+package employee;
+
+import javafx.beans.property.SimpleStringProperty;
+import task.Report;
+
 public abstract class AbstractEmployee implements Employee {
     private final String name;
     private final Role role;
@@ -7,6 +12,7 @@ public abstract class AbstractEmployee implements Employee {
     private final String country;
     private final String telephoneNumber;
     private final String email;
+    private final SimpleStringProperty simpleStringPropertyName = new SimpleStringProperty("");
 
     AbstractEmployee(Builder builder){
         this.name = builder.name;
@@ -17,8 +23,24 @@ public abstract class AbstractEmployee implements Employee {
         this.country = builder.country;
         this.telephoneNumber = builder.telephoneNumber;
         this.email = builder.email;
+        simpleStringPropertyName.set(name);
     }
 
+    AbstractEmployee(String name, Role role){
+        this.name = name;
+        this.role = role;
+        this.report = new Report();
+        this.university = "";
+        this.sex = Sex.FEMALE;
+        this.country = "";
+        this.email = name + "@gmail.com";
+        this.telephoneNumber = "123456789";
+        simpleStringPropertyName.set(name);
+    }
+
+    public SimpleStringProperty getSimpleStringPropertyName() {
+        return simpleStringPropertyName;
+    }
 
     @Override
     public Role getRole() {
@@ -59,6 +81,7 @@ public abstract class AbstractEmployee implements Employee {
         return this.report;
     }
 
+
     @Override
     public String toString() {
         return "Name = " + name  +
@@ -81,11 +104,11 @@ public abstract class AbstractEmployee implements Employee {
         private String email;
 
 
-        public Builder(){
+        Builder(){
 
         }
 
-        public Builder(String name, Role role){
+        Builder(String name, Role role){
             this.name = name;
             this.role = role;
         }
