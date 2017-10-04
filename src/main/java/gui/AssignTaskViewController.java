@@ -28,7 +28,7 @@ public class AssignTaskViewController {
 
     private boolean taskCreated = false;
 
-
+    private String invalidInputString = "";
     @FXML
     void cancel(ActionEvent event) {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
@@ -43,7 +43,7 @@ public class AssignTaskViewController {
             Stage stage = (Stage) assignButton.getScene().getWindow();
             taskCreated = true;
             stage.hide();
-        } else new InvalidInput("Invalid input! Fill all fields with correct data");
+        } else new InvalidInput(invalidInputString);
     }
 
     private boolean isValid() {
@@ -53,12 +53,22 @@ public class AssignTaskViewController {
 
     private boolean isTaskValid() {
         String expression = "^[a-zA-Z\\s]+";
-        return !task.getText().isEmpty() && task.getText().matches(expression);
+        if (!task.getText().isEmpty() && task.getText().matches(expression))
+            return true;
+        else {
+            invalidInputString = "Task name must be a string";
+            return false;
+        }
     }
 
     private boolean isWorkUnitValid() {
         String pattern = "^\\d$";
-        return !unitsOfWork.getText().isEmpty() && unitsOfWork.getText().matches(pattern);
+        if (!unitsOfWork.getText().isEmpty() && unitsOfWork.getText().matches(pattern))
+            return true;
+        else {
+            invalidInputString = "Units of work field must be an integer";
+            return false;
+        }
     }
 
     public String getTaskName() {

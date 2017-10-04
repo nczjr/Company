@@ -18,6 +18,7 @@ import task.Task;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class MainViewController {
 
@@ -62,7 +63,7 @@ public class MainViewController {
         fireEmployeeButton.setDisable(true);
         assignTaskButton.setDisable(true);
         tree.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            report.setText(newSelection.getValue().reportWork().toString());
+            fillReports(newSelection);
             fillPersonalDetails(newSelection);
             hireEmployeeButton.setDisable(true);
             fireEmployeeButton.setDisable(false);
@@ -78,11 +79,10 @@ public class MainViewController {
         personalDetails.setMouseTransparent(true);
         personalDetails.setFocusTraversable(false);
         report.setEditable(false);
-        //report.setMouseTransparent(true);
-        //report.setFocusTraversable(false);
         treeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Employee, String> param) -> param.getValue().getValue().getSimpleStringPropertyName());
 
     }
+
     @FXML
     void addEmployee(ActionEvent event) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(Main.class.getClassLoader().getResource("addEmployeeView.fxml"));
@@ -119,7 +119,6 @@ public class MainViewController {
         selectedEmployee.getParent().getChildren().remove(selectedEmployee);
 
     }
-
 
     @FXML
     void hireEmployee(ActionEvent event) throws IOException {
@@ -174,6 +173,7 @@ public class MainViewController {
             showCompany(controller.getSizeOfCompany(),controller.getMaxNum());
     }
 
+
     private void prepareNewItem(TeamManager teamManager,TreeItem rootItem){
         TreeItem<Employee> newManager = new TreeItem<>(teamManager);
         newManager.setExpanded(true);
@@ -188,7 +188,6 @@ public class MainViewController {
             else managerItem.getChildren().add(new TreeItem<>(e));
         }
     }
-
 
     private void showCompany(int size, int maxNumOfEmployees){
         Generator.generate(size,maxNumOfEmployees);
@@ -213,9 +212,14 @@ public class MainViewController {
             }else{
                 managerItem.getChildren().add(new TreeItem<>(e));
             }
-
         }   tree.setRoot(tree.getRoot());
-        //treeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Employee, String> param) -> param.getValue().getValue().getSimpleStringPropertyName());
+    }
+
+
+    private void fillReports(TreeItem<Employee> selectedItem) {
+        if (selectedItem.getValue().getRole() == Role.TEAM_LEADER || selectedItem.getValue().getRole() == Role.CEO)
+            report.setText(((TeamManager)selectedItem.getValue()).getReports().stream().map(Object::toString).collect(Collectors.joining("\n")));
+        else report.setText(selectedItem.getValue().reportWork().toString());
     }
 
     private void fillPersonalDetails(TreeItem<Employee> selectedItem){

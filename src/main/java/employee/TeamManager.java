@@ -16,7 +16,7 @@ public class TeamManager extends AbstractEmployee implements Manager {
     private final Report report;
     private final int maxNumEmployes;
     private Predicate<Employee> hireStrategy;
-    private ArrayList<Report> reports;
+    private ArrayList<Report> reports = new ArrayList<>();
 
 
     TeamManager(Builder builder){
@@ -92,12 +92,7 @@ public class TeamManager extends AbstractEmployee implements Manager {
 
     @Override
     public Report reportWork() {
-//        if (getRole().compareTo(Role.CEO) == 0){
-//            return getReports();
-//        }else{
-//            return this.report;
-//        }
-    return report;
+        return report;
     }
 
 
@@ -111,7 +106,6 @@ public class TeamManager extends AbstractEmployee implements Manager {
         getEmployeesArray().sort(new EmployeeComparator().getComparator());
         for (Employee e: getEmployeesArray())
             if (e.reportWork().getHoursWorked() != 0){
-
                 reports.add(e.reportWork());
             }
         return reports;
