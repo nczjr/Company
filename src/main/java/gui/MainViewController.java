@@ -6,6 +6,7 @@ import employee.Role;
 import employee.TeamManager;
 import generator.Generator;
 import generator.Main;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -79,7 +80,7 @@ public class MainViewController {
         personalDetails.setMouseTransparent(true);
         personalDetails.setFocusTraversable(false);
         report.setEditable(false);
-        treeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Employee, String> param) -> param.getValue().getValue().getSimpleStringPropertyName());
+        treeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Employee, String> param) -> new SimpleStringProperty(param.getValue().getValue().getName()));
 
     }
 

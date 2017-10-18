@@ -15,6 +15,6 @@ public interface Employee {
     String getCountry();
     String getTelephoneNumber();
     String getEmail();
-    SimpleStringProperty getSimpleStringPropertyName();
+
 
 }

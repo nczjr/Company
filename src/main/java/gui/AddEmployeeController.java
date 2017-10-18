@@ -18,7 +18,7 @@ public class AddEmployeeController {
     private ObservableList<Role> roles = FXCollections.observableArrayList(CEO, CONTRIBUTOR, DEVELOPER, TEAM_LEADER, TESTER);
     private ObservableList<String> universities = FXCollections.observableArrayList("AGH","UJ","WAT");
     private ObservableList<Sex> sexes = FXCollections.observableArrayList(Sex.FEMALE,Sex.MALE);
-    private ObservableList<String> strategies =  FXCollections.observableArrayList("Only employees with gmail account","only employees from AGH","only employees from Poland","only women","only men","all employees can be hired");
+    private ObservableList<String> strategies =  FXCollections.observableArrayList(HireStrategy.getPredicates());
     private Employee createdEmployee;
     private boolean successfulCreation = false;
     @FXML
@@ -198,11 +198,11 @@ public class AddEmployeeController {
     }
 
 
-    public boolean isSuccessfulCreation() {
+    boolean isSuccessfulCreation() {
         return successfulCreation;
     }
 
-    public Employee getCreatedEmployee() {
+    Employee getCreatedEmployee() {
         return createdEmployee;
     }
 }

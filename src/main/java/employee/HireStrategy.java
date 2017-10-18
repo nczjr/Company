@@ -1,10 +1,12 @@
 package employee;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class HireStrategy {
+    private static LinkedList<String> predicates = new LinkedList<>();
     static Predicate<Employee> allEmployees(){
         return employee -> !employee.getName().isEmpty();
     }
@@ -31,7 +33,15 @@ public class HireStrategy {
                         .filter(predicate)
                         .collect(Collectors.toCollection(ArrayList<Employee>::new));
     }
-
+    public static LinkedList<String> getPredicates(){
+        predicates.add("Only employees with gmail account");
+        predicates.add("only employees from AGH");
+        predicates.add("only employees from Poland");
+        predicates.add("only women");
+        predicates.add("only men");
+        predicates.add("all employees can be hired");
+        return predicates;
+    }
     public static Predicate<Employee> getByName(String s){
         switch (s){
             case "only employees with gmail account": return hasGmailAccount();
