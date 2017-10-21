@@ -2,14 +2,11 @@ package webApp;
 
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationException;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import employee.*;
-import task.Report;
 
 import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.stream.Collectors;
 
 import static employee.Role.*;
 
@@ -51,11 +48,24 @@ class AddEmployeeWindow extends Window {
         cancelButton.addClickListener(event -> close());
         addButton.addClickListener(event -> {
             if (employeeBinder.writeBeanIfValid(employeeToBuild)) {
-                myUI.getEmployees().add(getEmployee());
+                hireIfPossible();
                 myUI.refresh();
                 close();
             } else Notification.show("Cannot add such an employee");
         });
+    }
+
+    private void hireIfPossible() {
+        Employee e = myUI.getSelectedEmployee();
+        if (myUI.isEmployeeSelected() && (e.getRole() == TEAM_LEADER
+                || e.getRole() == CEO)){
+            Employee toBeHired = getEmployee();
+            if (((TeamManager) e).canHire(toBeHired))
+                ((TeamManager) e).hire(toBeHired);
+                myUI.addHiredEmployee(e, toBeHired);
+        } else myUI.getEmployees().add(getEmployee());
+
+
     }
 
     private void setOnValueChangeListeners() {
@@ -72,6 +82,7 @@ class AddEmployeeWindow extends Window {
     }
 
     private void setFields() {
+        addButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         role.setItems(EnumSet.allOf(Role.class));
         role.setValue(Role.CONTRIBUTOR);
         sex.setItems(EnumSet.allOf(Sex.class));

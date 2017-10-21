@@ -12,22 +12,30 @@ import employee.TeamManager;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MyUI extends UI {
     private Button generateButton = new Button("Generate company");
-    private Button addButton = new Button("Add employee");
+    private Button addButton = new Button("Hire employee");
     private Button fireButton = new Button("Fire employee");
     private Button assignButton = new Button("Assign task");
     private TreeGrid<Employee> grid = new TreeGrid<>(Employee.class);
     private List<Employee> employees = new ArrayList<>();
+    private boolean isEmployeeSelected = false;
+    private TreeDataProvider<Employee> provider = (TreeDataProvider<Employee>) grid.getDataProvider();
+    private TreeData<Employee> data = provider.getTreeData();
 
 
-    public TreeGrid<Employee> getGrid() {
+    TreeGrid<Employee> getGrid() {
         return grid;
     }
 
     List<Employee> getEmployees() {
         return employees;
+    }
+
+    boolean isEmployeeSelected(){
+        return isEmployeeSelected;
     }
 
     @Override
@@ -47,10 +55,24 @@ public class MyUI extends UI {
             addWindow(window);
 
         });
+        assignButton.addClickListener(event -> {
+            AssignTaskWindow window = new AssignTaskWindow(this);
+            addWindow(window);
+        });
+        fireButton.addClickListener(event -> {
+            if (fireButton.isEnabled()){
+                TeamManager manager = (TeamManager) data.getParent(getSelectedEmployee());
+                manager.fire(getSelectedEmployee());
+                data.removeItem(getSelectedEmployee());
+                provider.refreshAll();
+            }
+        });
     }
 
     private void createLayout() {
         setGrid();
+        fireButton.setEnabled(false);
+        assignButton.setEnabled(false);
         HorizontalLayout layout = new HorizontalLayout(generateButton,addButton, fireButton,assignButton);
         Label mainLabel = new Label("Company Builder");
         mainLabel.setWidth("500px");
@@ -61,13 +83,18 @@ public class MyUI extends UI {
     private void setGrid() {
         grid.setSizeFull();
         grid.setColumns("name", "role", "email", "telephoneNumber", "university", "country", "sex", "report");
-        SingleSelectionModel<Employee> singleSelect = (SingleSelectionModel<Employee>) grid.getSelectionModel();
-        singleSelect.setDeselectAllowed(false);
+        grid.addSelectionListener(event -> {
+            isEmployeeSelected = true;
+            fireButton.setEnabled(true);
+            assignButton.setEnabled(true);
+        });
+    }
+
+    Employee getSelectedEmployee() {
+        return new ArrayList<>(grid.getSelectedItems()).get(0);
     }
 
     void refresh() {
-        TreeDataProvider<Employee> provider = (TreeDataProvider<Employee>) grid.getDataProvider();
-        TreeData<Employee> data = provider.getTreeData();
         data.addItems(null,employees);
         employees.forEach(employee -> setEmployeesGrid(data,employee));
         provider.refreshAll();
@@ -82,5 +109,10 @@ public class MyUI extends UI {
                 setEmployeesGrid(data,e);
             }
         }
+    }
+
+    void addHiredEmployee(Employee e, Employee toBeHired) {
+        data.addItems(e,toBeHired);
+        provider.refreshAll();
     }
 }
